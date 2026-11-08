@@ -46,23 +46,29 @@ docker compose down
 Copy `.env.example` to `.env` and adjust settings as needed:
 
 ```ini
-PORT=8000
-HOST=0.0.0.0
-FLASK_ENV=production
-SECRET_KEY=ats_enterprise_secret_key_secure_2026
+# Server
+PORT=
+HOST=
+FLASK_ENV=
+SECRET_KEY=
 
 # PostgreSQL
-PG_HOST=127.0.0.1
-PG_PORT=5433
-PG_DATABASE=ats_recovery_db
-PG_USER=postgres
-PG_PASSWORD=ats_enterprise_pg_pass_2026
+PG_HOST=
+PG_PORT=
+PG_DATABASE=
+PG_USER=
+PG_PASSWORD=
+PG_POOL_MIN=
+PG_POOL_MAX=
 
 # DragonflyDB
-DRAGONFLY_HOST=127.0.0.1
-DRAGONFLY_PORT=6380
-DRAGONFLY_DB=0
-DRAGONFLY_POOL_DB=1
+DRAGONFLY_HOST=
+DRAGONFLY_PORT=
+DRAGONFLY_DB=
+DRAGONFLY_POOL_DB=
+
+# SQLite Source Data
+SQLITE_SOURCE_PATH=
 ```
 
 *Note: When running with Docker, host ports are mapped to `5433` (Postgres) and `6380` (DragonflyDB) to avoid conflicts.*
