@@ -86,7 +86,6 @@ AtsCore/
 │   ├── services/       # Business logic (row, sheet, dispatch, dashboard)
 │   ├── config.py       # Application configuration
 │   └── __init__.py     # Flask app factory
-├── scripts/            # Database migration and connection test scripts
 ├── docker-compose.yml  # Multi-container orchestration
 ├── Dockerfile          # Container build definition
 ├── manage.py           # CLI management entrypoint
