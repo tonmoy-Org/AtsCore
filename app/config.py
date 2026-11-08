@@ -31,9 +31,6 @@ class Config:
     DRAGONFLY_POOL_DB = int(os.getenv("DRAGONFLY_POOL_DB")) if os.getenv("DRAGONFLY_POOL_DB") is not None else None
     DRAGONFLY_TIMEOUT = float(os.getenv("DRAGONFLY_TIMEOUT")) if os.getenv("DRAGONFLY_TIMEOUT") else None
 
-    # Source SQLite database path for migration
-    SQLITE_SOURCE_PATH = os.getenv("SQLITE_SOURCE_PATH")
-
     # Column definitions (A through Z)
     COLS_AZ = [chr(ord("A") + i) for i in range(26)]
 

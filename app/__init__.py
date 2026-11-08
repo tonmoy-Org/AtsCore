@@ -26,14 +26,19 @@ def create_app(config_class=Config):
 
     # Enable CORS for frontend clients / dashboards
     if CORS:
-        CORS(app, resources={r"/*": {"origins": "*"}})
+        CORS(app, resources={r"/*": {"origins": "*", "allow_headers": ["Content-Type", "Authorization", "X-API-Key", "X-Secret-Key"]}})
     else:
         @app.after_request
         def add_cors_headers(response):
             response.headers["Access-Control-Allow-Origin"] = "*"
-            response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization,X-API-Key,X-Secret-Key"
             response.headers["Access-Control-Allow-Methods"] = "GET,PUT,POST,DELETE,OPTIONS"
             return response
+
+    # Global Security & Route Authentication Barrier
+    from app.security import authenticate_request, add_security_headers
+    app.before_request(authenticate_request)
+    app.after_request(add_security_headers)
 
     # Register Blueprints
     app.register_blueprint(sheets_bp)

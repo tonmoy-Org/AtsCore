@@ -50,7 +50,10 @@ def main():
         print("Schema initialization completed successfully!")
 
     elif cmd == "migrate-sqlite":
-        source = sys.argv[2] if len(sys.argv) > 2 else Config.SQLITE_SOURCE_PATH
+        source = sys.argv[2] if len(sys.argv) > 2 else None
+        if not source:
+            print("Error: Source SQLite database path required. Usage: python manage.py migrate-sqlite <path_to_sqlite.db>")
+            return
         print(f"Starting SQLite to PostgreSQL migration from: {source}")
         res = run_migration_from_sqlite(source)
         print("Migration Result:", res)

@@ -66,9 +66,6 @@ DRAGONFLY_HOST=
 DRAGONFLY_PORT=
 DRAGONFLY_DB=
 DRAGONFLY_POOL_DB=
-
-# SQLite Source Data
-SQLITE_SOURCE_PATH=
 ```
 
 *Note: When running with Docker, host ports are mapped to `5433` (Postgres) and `6380` (DragonflyDB) to avoid conflicts.*
