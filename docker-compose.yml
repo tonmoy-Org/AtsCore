@@ -1,0 +1,71 @@
+services:
+  # 1. PostgreSQL 16 Enterprise Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: atscore_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${PG_DATABASE:-ats_recovery_db}
+      POSTGRES_USER: ${PG_USER:-postgres}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:-ats_enterprise_pg_pass_2026}
+    ports:
+      - "${PG_PORT:-5432}:5432"
+    volumes:
+      - atscore_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-postgres} -d ${PG_DATABASE:-ats_recovery_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. DragonflyDB v2.0+ High-Performance In-Memory Cache
+  dragonfly:
+    image: docker.dragonflydb.io/dragonflydb/dragonfly:latest
+    container_name: atscore_dragonfly
+    restart: unless-stopped
+    command: ["dragonfly", "--logtostderr", "--maxmemory=4GB", "--proactor_threads=4"]
+    ports:
+      - "${DRAGONFLY_PORT:-6379}:6379"
+    volumes:
+      - atscore_dfdata:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 3. AtsCore Flask Enterprise Backend
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: atscore_backend
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - FLASK_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-ats_enterprise_secret_key_secure_2026}
+      - PG_HOST=postgres
+      - PG_PORT=5432
+      - PG_DATABASE=${PG_DATABASE:-ats_recovery_db}
+      - PG_USER=${PG_USER:-postgres}
+      - PG_PASSWORD=${PG_PASSWORD:-ats_enterprise_pg_pass_2026}
+      - DRAGONFLY_HOST=dragonfly
+      - DRAGONFLY_PORT=6379
+      - DRAGONFLY_DB=0
+      - DRAGONFLY_POOL_DB=1
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      dragonfly:
+        condition: service_healthy
+
+volumes:
+  atscore_pgdata:
+  atscore_dfdata:
+
