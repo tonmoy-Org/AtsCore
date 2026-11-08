@@ -1,14 +1,47 @@
+# Git
+.git
+.gitignore
+
+# Python
 __pycache__
 *.pyc
 *.pyo
 *.pyd
-.git
-.gitignore
+.Python
+env/
+venv/
+.venv/
+
+# Environment
 .env
+.env.*
+!.env.example
+
+# Databases & Backups
 *.db
+*.sqlite
 *.sqlite3
-node_modules
+*.dump
+*.sql
+*.backup
+
+# Logs & Temporary
+logs/
+*.log
+exports/
+temp/
+tmp/
+
+# Testing & Coverage
 .pytest_cache
+.coverage
+htmlcov/
+
+# Editors & IDEs
 .vscode
 .idea
+*.swp
 
+# OS
+.DS_Store
+Thumbs.db
